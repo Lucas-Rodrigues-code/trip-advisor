@@ -4,10 +4,10 @@ import { GoogleMap, LoadScript } from "@react-google-maps/api";
 
 const MapComponent = () => {
   return (
-    <>
-      <LoadScript googleMapsApiKey="AIzaSyDKwa0QEaeJ4reYX5M_DqrXOa7TA8Q2svM">
+    < >
+      <LoadScript googleMapsApiKey={"AIzaSyDKwa0QEaeJ4reYX5M_DqrXOa7TA8Q2svM"}>
         <GoogleMap
-          mapContainerStyle={{ height: "600px", width: "100%" }}
+          mapContainerStyle={{ height: "100vh", width: "100%" }}
           center={{ lat: -3.745, lng: -38.523 }}
           zoom={10}
         >

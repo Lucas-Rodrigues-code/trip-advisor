@@ -1,11 +1,8 @@
 import Header from "@/components/header";
 import Search from "@/components/search";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import MyComponent from "@/components/map";
+import MapComponent from "@/components/map";
+import List from "@/components/list";
 
 export default function Home() {
   return (
@@ -13,8 +10,10 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Search />
-
-        <MyComponent />
+        <div className="flex flex-col md:flex-row">
+          <List />
+          <MapComponent />
+        </div>
       </main>
     </div>
   );
