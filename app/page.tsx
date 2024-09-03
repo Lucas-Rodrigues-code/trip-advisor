@@ -3,6 +3,7 @@ import Search from "@/components/search";
 
 import MapComponent from "@/components/map";
 import List from "@/components/list";
+import Footer from "@/components/footer";
 
 export default function Home() {
   return (
@@ -14,7 +15,9 @@ export default function Home() {
           <List />
           <MapComponent />
         </div>
+        
       </main>
+      <Footer/>
     </div>
   );
 }
