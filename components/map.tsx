@@ -1,20 +1,32 @@
-"use client";
-import React, { createContext } from "react";
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import GoogleMapReact from "google-map-react";
 
-const MapComponent = () => {
+type MapComponentProps = {
+  setCoordinates: (coordinates: any) => void;
+  setBounds: (bounds: any) => void;
+  coordinates: any;
+};
+
+const MapComponent = ({
+  setCoordinates,
+  setBounds,
+  coordinates,
+}: MapComponentProps) => {
   return (
-    < >
-      <LoadScript googleMapsApiKey={"AIzaSyDKwa0QEaeJ4reYX5M_DqrXOa7TA8Q2svM"}>
-        <GoogleMap
-          mapContainerStyle={{ height: "100vh", width: "100%" }}
-          center={{ lat: -3.745, lng: -38.523 }}
-          zoom={10}
-        >
-          {/* Child components, such as markers, info windows, etc. */}
-        </GoogleMap>
-      </LoadScript>
-    </>
+    <div className="h-[100vh] w-full">
+      <GoogleMapReact
+        bootstrapURLKeys={{ key: "AIzaSyDKwa0QEaeJ4reYX5M_DqrXOa7TA8Q2svM" }}
+        defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}
+        center={coordinates}
+        defaultZoom={10}
+        margin={[50, 50, 50, 50]}
+        onChange={(e) => {
+          setCoordinates({ lat: e.center.lat, lng: e.center.lng });
+          setBounds({ ne: e.marginBounds.ne, sw: e.marginBounds.sw });
+        }}
+      >
+        {/* Child components, such as markers, info windows, etc. */}
+      </GoogleMapReact>
+    </div>
   );
 };
 
