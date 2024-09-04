@@ -1,9 +1,11 @@
 import GoogleMapReact from "google-map-react";
 
+import { Bounds, Coordinates } from "@/types";
+
 type MapComponentProps = {
-  setCoordinates: (coordinates: any) => void;
-  setBounds: (bounds: any) => void;
-  coordinates: any;
+  setCoordinates: (coordinates: Coordinates) => void;
+  setBounds: (bounds: Bounds) => void;
+  coordinates: Coordinates;
 };
 
 const MapComponent = ({
@@ -11,10 +13,20 @@ const MapComponent = ({
   setBounds,
   coordinates,
 }: MapComponentProps) => {
+  process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  console.log(
+    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+    "process.env.GOOGLE_MAPS_API_KEY"
+  );
+  if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
+    return (
+      <div className="h-[100vh] w-full">Google Maps API Key not found</div>
+    );
+  }
   return (
     <div className="h-[100vh] w-full">
       <GoogleMapReact
-        bootstrapURLKeys={{ key: "AIzaSyDKwa0QEaeJ4reYX5M_DqrXOa7TA8Q2svM" }}
+        bootstrapURLKeys={{ key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}
         defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}
         center={coordinates}
         defaultZoom={10}

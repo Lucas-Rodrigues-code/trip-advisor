@@ -1,8 +1,13 @@
 import axios from "axios";
 
-export async function getPlacesData(sw: any, ne: any, category: string) {
-    const URL =
-  `https://travel-advisor.p.rapidapi.com/${category}/list-in-boundary`;
+import { Coordinates } from "@/types";
+
+export async function getPlacesData(
+  sw: Coordinates,
+  ne: Coordinates,
+  category: string
+) {
+  const URL = `https://travel-advisor.p.rapidapi.com/${category}/list-in-boundary`;
   try {
     const {
       data: { data },

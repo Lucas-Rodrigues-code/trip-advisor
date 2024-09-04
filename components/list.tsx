@@ -46,7 +46,12 @@ function StarRating({
   );
 }
 
-export default function List({ places, categories, setCategories }: any) {
+type ListProps = {
+  places: any[];
+  category: string;
+  setCategories: (category: string) => void;
+};
+export default function List({ places, category, setCategory }: any) {
   const [selectedRatings, setSelectedRatings] = useState<number>(5);
 
   const handleRatingSelect = (rating: number) => {
@@ -56,9 +61,8 @@ export default function List({ places, categories, setCategories }: any) {
   const filteredPlaces = places.filter((item: any) => {
     return (
       Math.floor(Number(item.rating)) >= selectedRatings &&
-      item.category?.key === categories.slice(0, -1)
+      item.category?.key === category.slice(0, -1)
     );
-    console.log(item.category?.key, categories.slice(0, -1));
   });
 
   return (
@@ -69,21 +73,21 @@ export default function List({ places, categories, setCategories }: any) {
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger
           value={"restaurants"}
-          onClick={() => setCategories("restaurants")}
+          onClick={() => setCategory("restaurants")}
         >
           Restaurantes
         </TabsTrigger>
-        <TabsTrigger value={"hotels"} onClick={() => setCategories("hotels")}>
+        <TabsTrigger value={"hotels"} onClick={() => setCategory("hotels")}>
           Hotels
         </TabsTrigger>
         <TabsTrigger
           value={"attractions"}
-          onClick={() => setCategories("attractions")}
+          onClick={() => setCategory("attractions")}
         >
           Atrações
         </TabsTrigger>
       </TabsList>
-      <TabsContent value={categories} className="h-[90vh] overflow-auto">
+      <TabsContent value={category} className="h-[90vh] overflow-auto">
         <div className="mb-4 flex justify-between items-center">
           <h2 className="text-lg font-semibold">Filtrar por avaliação:</h2>
           <StarRating
