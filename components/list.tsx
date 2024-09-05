@@ -1,18 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star } from "lucide-react";
-import Image from "next/image";
+import PlaceCard from "./place-card";
 
-function StarRating({
+export function StarRating({
   rating,
   onSelect,
   selectedRating,
@@ -103,32 +96,8 @@ export default function List({ places, category, setCategory }: any) {
             </div>
           )}
           {filteredPlaces.length > 0 &&
-            filteredPlaces.map((item: any) => (
-              <Card key={item.name}>
-                <div className="relative h-48 w-full">
-                  <Image
-                    src={item.photo?.images?.large?.url || "/york.jpg"}
-                    alt={item.name}
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-t-lg"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle>{item.name}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm font-medium">Rating:</div>
-                    <StarRating
-                      rating={item.rating}
-                      onSelect={() => {}}
-                      selectedRating={Math.floor(Number(item.rating))}
-                    />
-                  </div>
-                </CardContent>
-              </Card>
+            filteredPlaces.map((place: any, i: number) => (
+              <PlaceCard place={place} key={i} />
             ))}
         </div>
       </TabsContent>
