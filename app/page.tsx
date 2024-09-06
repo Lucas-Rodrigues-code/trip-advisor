@@ -27,9 +27,14 @@ export default function Home() {
 
   useEffect(() => {
     if (bounds && bounds.sw !== null && bounds.ne !== null) {
-      getPlacesData(bounds.sw, bounds.ne, category).then((data) => {
-        setPlaces(data);
-      });
+      getPlacesData(bounds.sw, bounds.ne, category)
+        .then((data) => {
+          setPlaces(data);
+        })
+        .catch((error) => {
+          console.error("Error fetching places data", error);
+          setPlaces([]);
+        });
     }
   }, [coordinates, bounds, category]);
 
@@ -39,7 +44,11 @@ export default function Home() {
       <main className="flex-1">
         <Search />
         <div className="flex flex-col md:flex-row">
-          <List places={places} category={category} setCategory={setCategory} />
+          <List
+            places={places?.length > 0 ? places : []}
+            category={category}
+            setCategory={setCategory}
+          />
           {coordinates === null ? (
             <div className="h-[100vh] w-full">Loading...</div>
           ) : (
@@ -47,6 +56,7 @@ export default function Home() {
               setCoordinates={setCoordinates}
               setBounds={setBounds}
               coordinates={coordinates}
+              places={places?.length > 0 ? places : []}
             />
           )}
         </div>

@@ -42,16 +42,16 @@ export function StarRating({
 type ListProps = {
   places: any[];
   category: string;
-  setCategories: (category: string) => void;
+  setCategory: (category: string) => void;
 };
-export default function List({ places, category, setCategory }: any) {
+export default function List({ places, category, setCategory }: ListProps) {
   const [selectedRatings, setSelectedRatings] = useState<number>(5);
 
   const handleRatingSelect = (rating: number) => {
     setSelectedRatings(rating);
   };
-
-  const filteredPlaces = places.filter((item: any) => {
+  console.log(places, "places");
+  const filteredPlaces = places?.filter((item: any) => {
     return (
       Math.floor(Number(item.rating)) >= selectedRatings &&
       item.category?.key === category.slice(0, -1)
