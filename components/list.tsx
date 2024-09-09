@@ -50,7 +50,7 @@ export default function List({ places, category, setCategory }: ListProps) {
   const handleRatingSelect = (rating: number) => {
     setSelectedRatings(rating);
   };
-  console.log(places, "places");
+  
   const filteredPlaces = places?.filter((item: any) => {
     return (
       Math.floor(Number(item.rating)) >= selectedRatings &&

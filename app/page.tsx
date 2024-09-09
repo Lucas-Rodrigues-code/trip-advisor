@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (bounds && bounds.sw !== null && bounds.ne !== null) {
+  /*   if (bounds && bounds.sw !== null && bounds.ne !== null) {
       getPlacesData(bounds.sw, bounds.ne, category)
         .then((data) => {
           setPlaces(dataMock);
@@ -36,7 +36,7 @@ export default function Home() {
           console.error("Error fetching places data", error);
           setPlaces(dataMock);
         });
-    }
+    } */
   }, [coordinates, bounds, category]);
 
   return (

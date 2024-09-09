@@ -15,6 +15,7 @@ import {
   CardTitle,
 } from "./ui/card";
 import Image from "next/image";
+import useMediaQuery from "@/hooks";
 
 type MapComponentProps = {
   setCoordinates: (coordinates: Coordinates) => void;
@@ -29,6 +30,8 @@ const MapComponent = ({
   coordinates,
   places,
 }: MapComponentProps) => {
+  const isDesktop = useMediaQuery("(min-width: 768px)");
+
   const handleBoundsChanged = (event: MapCameraChangedEvent) => {
     const center = event.detail.center;
     const bounds = event.detail.bounds;
@@ -58,34 +61,40 @@ const MapComponent = ({
           onBoundsChanged={handleBoundsChanged}
         >
           {places.length > 0 &&
-            places.map(
-              (place, index) => (
-                console.log(place),
-                (
-                  <InfoWindow
-                    position={{
-                      lat: Number(place.latitude),
-                      lng: Number(place.longitude),
-                    }}
-                  >
-                    <Card className="w-[150px] h-[100%] overflow-hidden">
-                      <Image
-                        alt="Card image"
-                        width={100}
-                        height={50}
-                        src={place.photo?.images?.small?.url}
-                        className="w-full object-cover"
-                      />
+            places.map((place, index) =>
+              isDesktop ? (
+                <InfoWindow
+                  key={index}
+                  position={{
+                    lat: Number(place.latitude),
+                    lng: Number(place.longitude),
+                  }}
+                >
+                  <Card className="w-[150px] h-[100%] overflow-hidden">
+                    <Image
+                      alt="Card image"
+                      width={100}
+                      height={50}
+                      src={place.photo?.images?.small?.url}
+                      className="w-full object-cover"
+                    />
 
-                      <CardHeader className="p-1">
-                        <CardTitle className="text-base">{place?.name}</CardTitle>
-                        <CardDescription className="text-xs">
+                    <CardHeader className="p-1">
+                      <CardTitle className="text-base">{place?.name}</CardTitle>
+                      <CardDescription className="text-xs">
                         {place?.description}
-                        </CardDescription>
-                      </CardHeader> 
-                    </Card>
-                  </InfoWindow>
-                )
+                      </CardDescription>
+                    </CardHeader>
+                  </Card>
+                </InfoWindow>
+              ) : (
+                <Marker
+                  key={index}
+                  position={{
+                    lat: Number(place.latitude),
+                    lng: Number(place.longitude),
+                  }}
+                />
               )
             )}
         </Map>
