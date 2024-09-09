@@ -8,9 +8,10 @@ import List from "@/components/list";
 import Footer from "@/components/footer";
 import { getPlacesData } from "@/api";
 import { Bounds, Coordinates } from "@/types";
+import { dataMock } from "@/mock";
 
 export default function Home() {
-  const [places, setPlaces] = useState([]);
+  const [places, setPlaces] = useState(dataMock);
 
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [bounds, setBounds] = useState<Bounds | null>(null);
@@ -29,11 +30,11 @@ export default function Home() {
     if (bounds && bounds.sw !== null && bounds.ne !== null) {
       getPlacesData(bounds.sw, bounds.ne, category)
         .then((data) => {
-          setPlaces(data);
+          setPlaces(dataMock);
         })
         .catch((error) => {
           console.error("Error fetching places data", error);
-          setPlaces([]);
+          setPlaces(dataMock);
         });
     }
   }, [coordinates, bounds, category]);

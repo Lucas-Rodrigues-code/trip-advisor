@@ -1,11 +1,20 @@
 import {
   APIProvider,
+  InfoWindow,
   Map,
   MapCameraChangedEvent,
   Marker,
 } from "@vis.gl/react-google-maps";
 
 import { Bounds, Coordinates } from "@/types";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/card";
+import Image from "next/image";
 
 type MapComponentProps = {
   setCoordinates: (coordinates: Coordinates) => void;
@@ -49,14 +58,36 @@ const MapComponent = ({
           onBoundsChanged={handleBoundsChanged}
         >
           {places.length > 0 &&
-            places.map((place, index) => (
-              <Marker
-                position={{
-                  lat: Number(place.latitude),
-                  lng: Number(place.longitude),
-                }}
-              />
-            ))}
+            places.map(
+              (place, index) => (
+                console.log(place),
+                (
+                  <InfoWindow
+                    position={{
+                      lat: Number(place.latitude),
+                      lng: Number(place.longitude),
+                    }}
+                  >
+                    <Card className="w-[150px] h-[100%] overflow-hidden">
+                      <Image
+                        alt="Card image"
+                        width={100}
+                        height={50}
+                        src={place.photo?.images?.small?.url}
+                        className="w-full object-cover"
+                      />
+
+                      <CardHeader className="p-1">
+                        <CardTitle className="text-base">{place?.name}</CardTitle>
+                        <CardDescription className="text-xs">
+                        {place?.description}
+                        </CardDescription>
+                      </CardHeader> 
+                    </Card>
+                  </InfoWindow>
+                )
+              )
+            )}
         </Map>
       </APIProvider>
     </div>
