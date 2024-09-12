@@ -46,7 +46,7 @@ const MapComponent = ({
 
   if (!process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY) {
     return (
-      <div className="h-[100vh] w-full">Google Maps API Key not found</div>
+      <div className="h-[100vh] w-full flex justify-center items-center">Google Maps API Key not found</div>
     );
   }
   return (

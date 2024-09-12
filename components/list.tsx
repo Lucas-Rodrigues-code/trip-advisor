@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Star } from "lucide-react";
 import PlaceCard from "./place-card";
@@ -43,21 +42,17 @@ type ListProps = {
   places: any[];
   category: string;
   setCategory: (category: string) => void;
+  handleRatingSelect: (rating: number) => void;
+  selectedRatings: number;
 };
-export default function List({ places, category, setCategory }: ListProps) {
-  const [selectedRatings, setSelectedRatings] = useState<number>(5);
 
-  const handleRatingSelect = (rating: number) => {
-    setSelectedRatings(rating);
-  };
-  
-  const filteredPlaces = places?.filter((item: any) => {
-    return (
-      Math.floor(Number(item.rating)) >= selectedRatings &&
-      item.category?.key === category.slice(0, -1)
-    );
-  });
-
+export default function List({
+  places,
+  category,
+  setCategory,
+  handleRatingSelect,
+  selectedRatings,
+}: ListProps) {
   return (
     <Tabs
       defaultValue="restaurants"
@@ -90,13 +85,13 @@ export default function List({ places, category, setCategory }: ListProps) {
           />
         </div>
         <div className="space-y-4">
-          {filteredPlaces.length === 0 && (
+          {places.length === 0 && (
             <div className="text-center text-muted-foreground">
               No places found
             </div>
           )}
-          {filteredPlaces.length > 0 &&
-            filteredPlaces.map((place: any, i: number) => (
+          {places.length > 0 &&
+            places.map((place: any, i: number) => (
               <PlaceCard place={place} key={i} />
             ))}
         </div>

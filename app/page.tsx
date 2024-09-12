@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import Header from "@/components/header";
 import Search from "@/components/search";
@@ -12,11 +12,22 @@ import { dataMock } from "@/mock";
 
 export default function Home() {
   const [places, setPlaces] = useState(dataMock);
+  const [selectedRatings, setSelectedRatings] = useState<number>(1);
 
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
   const [bounds, setBounds] = useState<Bounds | null>(null);
 
   const [category, setCategory] = useState<string>("restaurants");
+
+  const handleRatingSelect = (rating: number) => {
+    setSelectedRatings(rating);
+  };
+
+  const filteredPlaces = useMemo(() => {
+    return places.filter(
+      (item) => Math.floor(Number(item.rating)) >= selectedRatings
+    );
+  }, [places, selectedRatings]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -27,7 +38,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-  /*   if (bounds && bounds.sw !== null && bounds.ne !== null) {
+    /*   if (bounds && bounds.sw !== null && bounds.ne !== null) {
       getPlacesData(bounds.sw, bounds.ne, category)
         .then((data) => {
           setPlaces(dataMock);
@@ -46,18 +57,22 @@ export default function Home() {
         <Search />
         <div className="flex flex-col md:flex-row">
           <List
-            places={places?.length > 0 ? places : []}
+            places={filteredPlaces?.length > 0 ? filteredPlaces : []}
             category={category}
             setCategory={setCategory}
+            handleRatingSelect={handleRatingSelect}
+            selectedRatings={selectedRatings}
           />
           {coordinates === null ? (
-            <div className="h-[100vh] w-full">Loading...</div>
+            <div className="h-[100vh] w-full flex justify-center items-center">
+              Loading...
+            </div>
           ) : (
             <MapComponent
               setCoordinates={setCoordinates}
               setBounds={setBounds}
               coordinates={coordinates}
-              places={places?.length > 0 ? places : []}
+              places={filteredPlaces?.length > 0 ? filteredPlaces : []}
             />
           )}
         </div>
