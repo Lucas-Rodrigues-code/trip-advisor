@@ -3,9 +3,9 @@ import { Input } from "@/components/ui/input";
 
 export default function Search() {
   return (
-    <section className="bg-primary py-12 md:py-20">
+    <section className="bg-primary pb-10">
       <div className="container mx-auto px-4 md:px-6">
-        <div className="max-w-2xl mx-auto text-center space-y-4">
+        <div className="max-w-2xl mx-auto text-center space-y-1">
           <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl text-white">
             Encontre sua próxima aventura
           </h1>

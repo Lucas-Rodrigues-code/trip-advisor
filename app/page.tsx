@@ -1,14 +1,12 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 
-import Header from "@/components/header";
 import Search from "@/components/search";
 import MapComponent from "@/components/map";
 import List from "@/components/list";
-import Footer from "@/components/footer";
 import { getPlacesData } from "@/api";
 import { Bounds, Coordinates } from "@/types";
-import { dataMock } from "@/mock";
+import { dataMock } from "../mock";
 
 export default function Home() {
   const [places, setPlaces] = useState(dataMock);
@@ -52,17 +50,16 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-[100dvh]">
-      <Header />
       <main className="flex-1">
         <Search />
-        <div className="flex flex-col md:flex-row">
+        <div className="flex flex-col md:flex-row h-full md:h-[80vh]">
           <List
             places={filteredPlaces?.length > 0 ? filteredPlaces : []}
             category={category}
             setCategory={setCategory}
             handleRatingSelect={handleRatingSelect}
             selectedRatings={selectedRatings}
-          />
+          /> 
           {coordinates === null ? (
             <div className="h-[100vh] w-full flex justify-center items-center">
               Loading...
@@ -77,7 +74,6 @@ export default function Home() {
           )}
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

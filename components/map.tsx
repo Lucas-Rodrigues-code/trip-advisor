@@ -50,10 +50,10 @@ const MapComponent = ({
     );
   }
   return (
-    <div className="h-[100vh] w-full">
+    <div className="w-full h-[800px] md:h-full ">
       <APIProvider apiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}>
         <Map
-          style={{ width: "100%", height: "100vh" }}
+          style={{ width: "100%", height: "100%" }}
           defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}
           defaultZoom={12}
           gestureHandling={"greedy"}

@@ -56,7 +56,7 @@ export default function List({
   return (
     <Tabs
       defaultValue="restaurants"
-      className="w-full h-[100vh] max-w-2xl mx-auto p-3 mb-11"
+      className="w-full max-w-2xl mx-auto p-3 mb-11"
     >
       <TabsList className="grid w-full grid-cols-3">
         <TabsTrigger
@@ -75,7 +75,7 @@ export default function List({
           Atrações
         </TabsTrigger>
       </TabsList>
-      <TabsContent value={category} className="h-[90vh] overflow-auto">
+      <TabsContent value={category} className="h-full overflow-auto">
         <div className="mb-4 flex justify-between items-center">
           <h2 className="text-lg font-semibold">Filtrar por avaliação:</h2>
           <StarRating
@@ -84,7 +84,7 @@ export default function List({
             selectedRating={selectedRatings || 0}
           />
         </div>
-        <div className="space-y-4">
+        <div className="space-y-4 overflow-auto">
           {places.length === 0 && (
             <div className="text-center text-muted-foreground">
               No places found
