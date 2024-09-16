@@ -7,6 +7,7 @@ import List from "@/components/list";
 import { getPlacesData } from "@/api";
 import { Bounds, Coordinates } from "@/types";
 import { dataMock } from "../mock";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 export default function Home() {
   const [places, setPlaces] = useState(dataMock);
@@ -48,31 +49,38 @@ export default function Home() {
     } */
   }, [coordinates, bounds, category]);
 
+  const [selectedPlace, setSelectedPlace] =
+    useState<google.maps.places.PlaceResult | null>(null);
+  const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+  console.log(selectedPlace, "selectedPlace");
+
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <main className="flex-1">
-        <Search />
-        <div className="flex flex-col md:flex-row h-full md:h-[80vh]">
-          <List
-            places={filteredPlaces?.length > 0 ? filteredPlaces : []}
-            category={category}
-            setCategory={setCategory}
-            handleRatingSelect={handleRatingSelect}
-            selectedRatings={selectedRatings}
-          /> 
-          {coordinates === null ? (
-            <div className="h-[100vh] w-full flex justify-center items-center">
-              Loading...
-            </div>
-          ) : (
-            <MapComponent
-              setCoordinates={setCoordinates}
-              setBounds={setBounds}
-              coordinates={coordinates}
+        <APIProvider apiKey={API_KEY ? API_KEY : ""}>
+          <Search onPlaceSelect={setSelectedPlace} />
+          <div className="flex flex-col md:flex-row h-full md:h-[80vh]">
+            <List
               places={filteredPlaces?.length > 0 ? filteredPlaces : []}
+              category={category}
+              setCategory={setCategory}
+              handleRatingSelect={handleRatingSelect}
+              selectedRatings={selectedRatings}
             />
-          )}
-        </div>
+            {coordinates === null ? (
+              <div className="h-[100vh] w-full flex justify-center items-center">
+                Loading...
+              </div>
+            ) : (
+              <MapComponent
+                setCoordinates={setCoordinates}
+                setBounds={setBounds}
+                coordinates={coordinates}
+                places={filteredPlaces?.length > 0 ? filteredPlaces : []}
+              />
+            )}
+          </div>
+        </APIProvider>
       </main>
     </div>
   );
