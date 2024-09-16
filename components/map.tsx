@@ -41,7 +41,8 @@ const MapComponent = ({
     <div className="w-full h-[800px] md:h-full px-3 md:px-0">
       <Map
         style={{ width: "100%", height: "100%" }}
-        defaultCenter={{ lat: coordinates.lat, lng: coordinates.lng }}
+        defaultCenter={coordinates}
+        center={coordinates}
         defaultZoom={12}
         gestureHandling={"greedy"}
         disableDefaultUI={true}
