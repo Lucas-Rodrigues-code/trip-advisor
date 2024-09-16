@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
+import { APIProvider } from "@vis.gl/react-google-maps";
 
 import Search from "@/components/search";
 import MapComponent from "@/components/map";
@@ -7,8 +8,9 @@ import List from "@/components/list";
 import { getPlacesData } from "@/api";
 import { Bounds, Coordinates } from "@/types";
 import { dataMock } from "../mock";
-import { APIProvider } from "@vis.gl/react-google-maps";
 import useCurrentPosition from "@/hooks/current-position";
+
+const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
   const [places, setPlaces] = useState(dataMock);
@@ -45,8 +47,15 @@ export default function Home() {
 
   const [selectedPlace, setSelectedPlace] =
     useState<google.maps.places.PlaceResult | null>(null);
-  const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-  console.log(selectedPlace, "selectedPlace");
+
+  useEffect(() => {
+    if (selectedPlace && selectedPlace.geometry?.location) {
+      setCoordinates({
+        lat: selectedPlace.geometry?.location.lat(),
+        lng: selectedPlace.geometry?.location.lng(),
+      });
+    }
+  }, [selectedPlace]);
 
   return (
     <div className="flex flex-col min-h-[100dvh]">

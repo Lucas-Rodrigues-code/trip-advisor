@@ -76,8 +76,6 @@ export default function Search({ onPlaceSelect }: Props) {
 
   const handleSuggestionClick = useCallback(
     (placeId: string) => {
-      console.log(placeId, "placeId");
-      alert("hi");
       if (!places) return;
 
       const detailRequestOptions = {
@@ -100,6 +98,13 @@ export default function Search({ onPlaceSelect }: Props) {
     [onPlaceSelect, places, placesService, sessionToken]
   );
 
+  const handleButtonClick = () => {
+    const placeId = predictionResults[0]?.place_id;
+    if (placeId) {
+      handleSuggestionClick(placeId);
+    }
+  };
+
   return (
     <section className="bg-primary pb-10">
       <div className="container mx-auto px-4 md:px-6">
@@ -110,7 +115,7 @@ export default function Search({ onPlaceSelect }: Props) {
           <p className="text-muted-foreground md:text-xl">
             Pesquise hotéis, restaurantes e coisas para fazer.
           </p>
-          <form className="relative flex items-center gap-2 bg-primary-foreground rounded-md p-2 h-14">
+          <div className="relative flex items-center gap-2 bg-primary-foreground rounded-md p-2 h-14">
             <Command>
               <CommandInput
                 placeholder="Onde você está indo?"
@@ -135,8 +140,14 @@ export default function Search({ onPlaceSelect }: Props) {
                   })}
               </CommandList>
             </Command>
-            <Button className="px-4 py-2 text-sm">Pesquisar</Button>
-          </form>
+            <Button
+              className="px-4 py-2 text-sm"
+              onClick={handleButtonClick}
+              disabled={predictionResults[0]?.place_id ? false : true}
+            >
+              Pesquisar
+            </Button>
+          </div>
         </div>
       </div>
     </section>
