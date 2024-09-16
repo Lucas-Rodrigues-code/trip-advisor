@@ -123,7 +123,7 @@ export default function Search({ onPlaceSelect }: Props) {
                 onInput={(event: FormEvent<HTMLInputElement>) =>
                   onInputChange(event)
                 }
-                className="flex-1 bg-transparent border-none focus:ring-0"
+                className="flex-1 bg-transparent border-none focus:ring-0 text-base"
               />
               <CommandList className="absolute z-10 bg-white top-12 left-0 right-0">
                 {predictionResults.length > 0 &&
