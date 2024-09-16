@@ -8,12 +8,14 @@ import { getPlacesData } from "@/api";
 import { Bounds, Coordinates } from "@/types";
 import { dataMock } from "../mock";
 import { APIProvider } from "@vis.gl/react-google-maps";
+import useCurrentPosition from "@/hooks/current-position";
 
 export default function Home() {
   const [places, setPlaces] = useState(dataMock);
   const [selectedRatings, setSelectedRatings] = useState<number>(1);
 
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+  useCurrentPosition(setCoordinates);
   const [bounds, setBounds] = useState<Bounds | null>(null);
 
   const [category, setCategory] = useState<string>("restaurants");
@@ -27,14 +29,6 @@ export default function Home() {
       (item) => Math.floor(Number(item.rating)) >= selectedRatings
     );
   }, [places, selectedRatings]);
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition(
-      ({ coords: { latitude, longitude } }) => {
-        setCoordinates({ lat: latitude, lng: longitude });
-      }
-    );
-  }, []);
 
   useEffect(() => {
     /*   if (bounds && bounds.sw !== null && bounds.ne !== null) {
