@@ -38,7 +38,7 @@ const MapComponent = ({
   };
 
   return (
-    <div className="w-full h-[800px] md:h-full px-3 md:px-0">
+    <div className="w-full h-[800px] md:h-full px-3 md:px-0" id="map">
       <Map
         style={{ width: "100%", height: "100%" }}
         defaultCenter={coordinates}

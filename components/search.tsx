@@ -1,17 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-
 import React, { useEffect, useState, useCallback, FormEvent } from "react";
 import { useMap, useMapsLibrary } from "@vis.gl/react-google-maps";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "./ui/command";
+import { useRouter } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { Command, CommandInput, CommandList } from "./ui/command";
 
 interface Props {
   onPlaceSelect: (place: google.maps.places.PlaceResult | null) => void;
@@ -20,16 +12,14 @@ interface Props {
 export default function Search({ onPlaceSelect }: Props) {
   const map = useMap();
   const places = useMapsLibrary("places");
+  const router = useRouter();
 
-  // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#AutocompleteSessionToken
   const [sessionToken, setSessionToken] =
     useState<google.maps.places.AutocompleteSessionToken>();
 
-  // https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service
   const [autocompleteService, setAutocompleteService] =
     useState<google.maps.places.AutocompleteService | null>(null);
 
-  // https://developers.google.com/maps/documentation/javascript/reference/places-service
   const [placesService, setPlacesService] =
     useState<google.maps.places.PlacesService | null>(null);
 
@@ -77,7 +67,7 @@ export default function Search({ onPlaceSelect }: Props) {
   const handleSuggestionClick = useCallback(
     (placeId: string) => {
       if (!places) return;
-
+      router.push(`#map`);
       const detailRequestOptions = {
         placeId,
         fields: ["geometry", "name", "formatted_address"],
@@ -100,9 +90,18 @@ export default function Search({ onPlaceSelect }: Props) {
 
   const handleButtonClick = () => {
     const placeId = predictionResults[0]?.place_id;
+
     if (placeId) {
       handleSuggestionClick(placeId);
+      router.push(`#map`);
     }
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleButtonClick();
+    }
+    return;
   };
 
   return (
@@ -123,6 +122,7 @@ export default function Search({ onPlaceSelect }: Props) {
                 onInput={(event: FormEvent<HTMLInputElement>) =>
                   onInputChange(event)
                 }
+                onKeyDown={handleKeyDown}
                 className="flex-1 bg-transparent border-none focus:ring-0 text-base"
               />
               <CommandList className="absolute z-10 bg-white top-12 left-0 right-0">
