@@ -1,52 +1,75 @@
 "use client";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { APIProvider } from "@vis.gl/react-google-maps";
 
 import Search from "@/components/search";
 import MapComponent from "@/components/map";
 import List from "@/components/list";
 import { getPlacesData } from "@/api";
-import { Bounds, Coordinates } from "@/types";
-import { dataMock } from "../mock";
+import { Bounds, Coordinates, Place } from "@/types";
 import useCurrentPosition from "@/hooks/current-position";
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 export default function Home() {
-  const [places, setPlaces] = useState(dataMock);
+  const [places, setPlaces]: any[] = useState([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<any[]>([]);
+
+  const [selectedPlace, setSelectedPlace] =
+    useState<google.maps.places.PlaceResult | null>(null);
   const [selectedRatings, setSelectedRatings] = useState<number>(1);
 
   const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
-  useCurrentPosition(setCoordinates);
   const [bounds, setBounds] = useState<Bounds | null>(null);
 
-  const [category, setCategory] = useState<string>("restaurants");
+  const [category, setCategory] = useState<string>("");
+
+  useCurrentPosition(setCoordinates);
 
   const handleRatingSelect = (rating: number) => {
     setSelectedRatings(rating);
   };
 
-  const filteredPlaces = useMemo(() => {
-    return places.filter(
-      (item) => Math.floor(Number(item.rating)) >= selectedRatings
+  useEffect(() => {
+    const filerData = places.filter(
+      (item: any) => Math.floor(Number(item.rating)) >= selectedRatings
     );
-  }, [places, selectedRatings]);
+    setFilteredPlaces(filerData);
+  }, [selectedRatings]);
 
   useEffect(() => {
-    /*   if (bounds && bounds.sw !== null && bounds.ne !== null) {
+    if (bounds && bounds.sw !== null && bounds.ne !== null) {
       getPlacesData(bounds.sw, bounds.ne, category)
         .then((data) => {
-          setPlaces(dataMock);
+          if (data) {
+            const place: Place[] = data
+              .map((item: Place) => {
+                return {
+                  name: item.name,
+                  rating: item.rating,
+                  photo: item.photo,
+                  description: item.description,
+                  address: item.address,
+                  phone: item.phone,
+                  price: item.price,
+                  cuisine: item.cuisine,
+                  website: item.website,
+                  web_url: item.web_url,
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                };
+              })
+              .filter((item: any) => item.name !== undefined);
+            setFilteredPlaces([]);
+            setPlaces(place);
+          }
         })
         .catch((error) => {
           console.error("Error fetching places data", error);
-          setPlaces(dataMock);
+          setPlaces([]);
         });
-    } */
-  }, [coordinates, bounds, category]);
-
-  const [selectedPlace, setSelectedPlace] =
-    useState<google.maps.places.PlaceResult | null>(null);
+    }
+  }, [category]);
 
   useEffect(() => {
     if (selectedPlace && selectedPlace.geometry?.location) {
@@ -54,6 +77,8 @@ export default function Home() {
         lat: selectedPlace.geometry?.location.lat(),
         lng: selectedPlace.geometry?.location.lng(),
       });
+      setCategory("");
+      setPlaces([]);
     }
   }, [selectedPlace]);
 
@@ -64,7 +89,7 @@ export default function Home() {
           <Search onPlaceSelect={setSelectedPlace} />
           <div className="flex flex-col md:flex-row h-full md:h-[80vh]">
             <List
-              places={filteredPlaces?.length > 0 ? filteredPlaces : []}
+              places={filteredPlaces.length ? filteredPlaces : places}
               category={category}
               setCategory={setCategory}
               handleRatingSelect={handleRatingSelect}
@@ -79,7 +104,7 @@ export default function Home() {
                 setCoordinates={setCoordinates}
                 setBounds={setBounds}
                 coordinates={coordinates}
-                places={filteredPlaces?.length > 0 ? filteredPlaces : []}
+                places={filteredPlaces.length ? filteredPlaces : places}
               />
             )}
           </div>

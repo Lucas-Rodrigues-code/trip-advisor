@@ -1,8 +1,20 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Star } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Loader, Star } from "lucide-react";
+
 import PlaceCard from "./place-card";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function StarRating({
   rating,
@@ -53,41 +65,71 @@ export default function List({
   handleRatingSelect,
   selectedRatings,
 }: ListProps) {
+  const [ranking, setRanking] = useState<number>(0);
+
   return (
-    <Tabs
-      defaultValue="restaurants"
-      className="w-full max-w-2xl mx-auto p-3 mb-11"
-    >
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger
-          value={"restaurants"}
-          onClick={() => setCategory("restaurants")}
-        >
-          Restaurantes
-        </TabsTrigger>
-        <TabsTrigger value={"hotels"} onClick={() => setCategory("hotels")}>
-          Hotels
-        </TabsTrigger>
-        <TabsTrigger
-          value={"attractions"}
-          onClick={() => setCategory("attractions")}
-        >
-          Atrações
-        </TabsTrigger>
-      </TabsList>
-      <TabsContent value={category} className="h-full overflow-auto">
-        <div className="mb-4 flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Filtrar por avaliação:</h2>
-          <StarRating
-            rating={5}
-            onSelect={(rating) => handleRatingSelect(rating)}
-            selectedRating={selectedRatings || 0}
-          />
+    <div className="w-full max-w-2xl mx-auto p-3 mb-11 overflow-auto ">
+      <div className="p-4 space-y-4 ">
+        <h2 className="text-2xl font-bold">Filtros</h2>
+
+        <div className="flex justify-between">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Tipo de Lugar</h3>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="w-[200px] justify-between">
+                  {category || "Selecionar Tipo"}
+                  <ChevronDown className="ml-2 h-4 w-4 opacity-50" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-[200px]">
+                <DropdownMenuLabel>Tipos de Lugar</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuRadioGroup
+                  value={category}
+                  onValueChange={setCategory}
+                >
+                  <DropdownMenuRadioItem value="restaurants">
+                    Restaurante
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="hotels">
+                    Hotel
+                  </DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem value="attractions">
+                    Atrações
+                  </DropdownMenuRadioItem>
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">Ranking</h3>
+            <div className="flex space-x-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <Button
+                  key={star}
+                  variant="outline"
+                  size="icon"
+                  className={cn(
+                    "h-8 w-8",
+                    ranking >= star ? "text-yellow-400" : "text-gray-300"
+                  )}
+                  onClick={() => {
+                    handleRatingSelect(star), setRanking(star);
+                  }}
+                >
+                  <Star className="h-4 w-4 fill-current" />
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
+      </div>
+      <div className="h-full">
         <div className="space-y-4 overflow-auto">
           {places.length === 0 && (
             <div className="text-center text-muted-foreground">
-              No places found
+              No places found <Loader />
             </div>
           )}
           {places.length > 0 &&
@@ -95,7 +137,7 @@ export default function List({
               <PlaceCard place={place} key={i} />
             ))}
         </div>
-      </TabsContent>
-    </Tabs>
+      </div>
+    </div>
   );
 }

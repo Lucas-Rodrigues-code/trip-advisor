@@ -19,7 +19,7 @@ export async function getPlacesData(
         tr_longitude: ne.lng,
       },
       headers: {
-        "x-rapidapi-key": "",
+        "x-rapidapi-key": process.env.NEXT_PUBLIC_TRIP_ADVISOR_API_KEY,
         "x-rapidapi-host": "travel-advisor.p.rapidapi.com",
       },
     });
