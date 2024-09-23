@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, Loader, Star } from "lucide-react";
+import { ChevronDown, Loader, Search, Star } from "lucide-react";
 
 import PlaceCard from "./place-card";
 import { cn } from "@/lib/utils";
@@ -15,6 +15,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LoadingSpinner from "./loading";
 
 export function StarRating({
   rating,
@@ -56,6 +57,8 @@ type ListProps = {
   setCategory: (category: string) => void;
   handleRatingSelect: (rating: number) => void;
   selectedRatings: number;
+  loading: boolean;
+  search: () => void;
 };
 
 export default function List({
@@ -64,6 +67,8 @@ export default function List({
   setCategory,
   handleRatingSelect,
   selectedRatings,
+  loading,
+  search,
 }: ListProps) {
   const [ranking, setRanking] = useState<number>(0);
 
@@ -102,6 +107,7 @@ export default function List({
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">Ranking</h3>
             <div className="flex space-x-2">
@@ -125,18 +131,31 @@ export default function List({
           </div>
         </div>
       </div>
+      <Button
+        className="w-full mb-2 flex justify-between"
+        variant="outline"
+        onClick={() => search()}
+      >
+        <span /> Pesquisar nessa área <Search />
+      </Button>
       <div className="h-full">
-        <div className="space-y-4 overflow-auto">
-          {places.length === 0 && (
-            <div className="text-center text-muted-foreground">
-              No places found <Loader />
-            </div>
-          )}
-          {places.length > 0 &&
-            places.map((place: any, i: number) => (
-              <PlaceCard place={place} key={i} />
-            ))}
-        </div>
+        {loading ? (
+          <div className="flex justify-center items-center h-[50%]">
+            <LoadingSpinner size="large" />
+          </div>
+        ) : (
+          <div className="space-y-4 overflow-auto">
+            {places.length === 0 && (
+              <div className="text-center text-muted-foreground">
+                No places found
+              </div>
+            )}
+            {places.length > 0 &&
+              places.map((place: any, i: number) => (
+                <PlaceCard place={place} key={i} />
+              ))}
+          </div>
+        )}
       </div>
     </div>
   );

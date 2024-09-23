@@ -23,6 +23,7 @@ export default function Home() {
   const [bounds, setBounds] = useState<Bounds | null>(null);
 
   const [category, setCategory] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useCurrentPosition(setCoordinates);
 
@@ -39,6 +40,7 @@ export default function Home() {
 
   useEffect(() => {
     if (bounds && bounds.sw !== null && bounds.ne !== null) {
+      setLoading(true);
       getPlacesData(bounds.sw, bounds.ne, category)
         .then((data) => {
           if (data) {
@@ -67,6 +69,9 @@ export default function Home() {
         .catch((error) => {
           console.error("Error fetching places data", error);
           setPlaces([]);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [category]);
@@ -82,6 +87,43 @@ export default function Home() {
     }
   }, [selectedPlace]);
 
+  const search = () => {
+    if (bounds && bounds.sw !== null && bounds.ne !== null) {
+      setLoading(true);
+      getPlacesData(bounds.sw, bounds.ne, category)
+        .then((data) => {
+          if (data) {
+            const place: Place[] = data
+              .map((item: Place) => {
+                return {
+                  name: item.name,
+                  rating: item.rating,
+                  photo: item.photo,
+                  description: item.description,
+                  address: item.address,
+                  phone: item.phone,
+                  price: item.price,
+                  cuisine: item.cuisine,
+                  website: item.website,
+                  web_url: item.web_url,
+                  latitude: item.latitude,
+                  longitude: item.longitude,
+                };
+              })
+              .filter((item: any) => item.name !== undefined);
+            setFilteredPlaces([]);
+            setPlaces(place);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching places data", error);
+          setPlaces([]);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  };
   return (
     <div className="flex flex-col min-h-[100dvh]">
       <main className="flex-1">
@@ -94,6 +136,8 @@ export default function Home() {
               setCategory={setCategory}
               handleRatingSelect={handleRatingSelect}
               selectedRatings={selectedRatings}
+              loading={loading}
+              search={search}
             />
             {coordinates === null ? (
               <div className="h-[100vh] w-full flex justify-center items-center">
