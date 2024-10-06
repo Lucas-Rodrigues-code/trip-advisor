@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Projeto Trip Advisor
 
-## Getting Started
+## Descrição
 
-First, run the development server:
+Este projeto é um guia de viagens interativo, permitindo aos usuários buscar informações sobre cidades, como restaurantes, atrações turísticas e hotéis. Ele utiliza diversas APIs externas, incluindo Google Maps e Travel Advisor, para oferecer uma experiência rica e informativa.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Tecnologias Utilizadas
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Next.js**: Framework React para criação de aplicações web rápidas e otimizadas.
+- **Typescript**: Linguagem para desenvolvimento seguro e robusto.
+- **React**: Biblioteca JavaScript para construção de interfaces de usuário dinâmicas.
+- **TailwindCSS**: Framework de CSS utilitário para estilização rápida e eficiente.
+- **google-map-react**: Biblioteca para integrar o Google Maps nas aplicações React.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Funcionalidades
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- **Busca por Destinos**: Os usuários podem pesquisar cidades e receber informações relevantes sobre restaurantes e atrações.
+- **Mapa Interativo**: Um mapa do Google Maps é exibido mostrando a localização da cidade pesquisada.
+- **Listagem de Ocorrências**: Uma lista detalhada de restaurantes, hotéis e atrações próximas ao destino escolhido.
 
-## Learn More
+## Requisitos para Execução
 
-To learn more about Next.js, take a look at the following resources:
+1. Clone o repositório:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   git clone https://github.com/seu-usuario/trip-advisor.git
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. Acesse a pasta do projeto::
 
-## Deploy on Vercel
+   ```bash
+   cd trip-advisor
+   ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. Instale as dependências:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+   ```bash
+   npm install
+   ```
+
+4. Adicione sua chave de API do Google Maps e da Travel Advisor:
+
+    - Obtenha uma API Key para o Google Maps Platform.
+    - Integre-se à API da Travel Advisor através da RapidAPI.
+    - Veja o env.example
+
+5. Execute a aplicação:
+   ```bash
+   npm run dev
+   ```
